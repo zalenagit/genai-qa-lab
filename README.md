@@ -87,4 +87,4 @@ docs/           Test strategy, reviewed AI test cases, mobile cases, guides
 
 ## Author
 
-**Zalina M. Yusop**, AI-QA Engineering Analyst · [LinkedIn](https://www.linkedin.com/in/szalina-myusop-b2624b211/)
+**Zalina M. Yusop**, AI-QA Engineering Analyst · [LinkedIn](https://www.linkedin.com/in/zalina-yusop-b2624b211/)
