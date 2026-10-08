@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ZY Demo Store - Login</title>
+<link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body>
+<header><strong>ZY Demo Store</strong></header>
+<main>
+  <form class="card" id="login-form" novalidate>
+    <h1>Sign in</h1>
+    <label for="username">Username</label>
+    <input id="username" name="username" autocomplete="username">
+    <label for="password">Password</label>
+    <input id="password" name="password" type="password" autocomplete="current-password">
+    <button type="submit">Login</button>
+    <div class="error" role="alert" hidden></div>
+  </form>
+</main>
+<script>
+  document.getElementById("login-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const err = document.querySelector("[role=alert]");
+    const { status, body } = await Store.api("/api/login", {
+      method: "POST",
+      body: JSON.stringify({
+        username: document.getElementById("username").value,
+        password: document.getElementById("password").value,
+      }),
+    });
+    if (status === 200) {
+      sessionStorage.setItem("token", body.token);
+      sessionStorage.setItem("cart", "{}");
+      location.href = "inventory.html";
+    } else {
+      err.textContent = body.error;
+      err.hidden = false;
+    }
+  });
+</script>
+</body></html>

@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ZY Demo Store - Checkout</title>
+<link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body>
+<header><a href="inventory.html"><strong>ZY Demo Store</strong></a></header>
+<main>
+  <form class="card" id="checkout-form" novalidate>
+    <h1>Checkout</h1>
+    <label for="first-name">First name</label><input id="first-name">
+    <label for="last-name">Last name</label><input id="last-name">
+    <label for="zip">ZIP code</label><input id="zip" inputmode="numeric">
+    <button type="submit">Place order</button>
+    <div class="error" role="alert" hidden></div>
+  </form>
+  <div class="card" id="confirmation" hidden>
+    <h1>Thank you for your order!</h1>
+    <p>Order number: <strong data-testid="order-id"></strong></p>
+    <p>Total (incl. 8% tax): <strong data-testid="order-total"></strong></p>
+  </div>
+</main>
+<script>
+  Store.requireLogin();
+  document.getElementById("checkout-form").addEventListener("submit", async (e) => {
+    e.preventDefault();
+    const err = document.querySelector("[role=alert]");
+    const items = Object.entries(Store.cart()).map(([id, qty]) => ({ product_id: Number(id), qty }));
+    const { status, body } = await Store.api("/api/orders", {
+      method: "POST",
+      body: JSON.stringify({
+        items,
+        customer: {
+          first_name: document.getElementById("first-name").value,
+          last_name: document.getElementById("last-name").value,
+          zip: document.getElementById("zip").value,
+        },
+      }),
+    });
+    if (status === 201) {
+      Store.saveCart({});
+      document.getElementById("checkout-form").hidden = true;
+      document.getElementById("confirmation").hidden = false;
+      document.querySelector("[data-testid=order-id]").textContent = body.id;
+      document.querySelector("[data-testid=order-total]").textContent = money(body.total);
+    } else {
+      err.textContent = body.error;
+      err.hidden = false;
+    }
+  });
+</script>
+</body></html>

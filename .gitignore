@@ -1,0 +1,9 @@
+.env
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+reports/
+test-results/
+docs/generated/
+data/checkout_data_ai.csv

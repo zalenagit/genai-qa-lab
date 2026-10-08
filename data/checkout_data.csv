@@ -1,0 +1,9 @@
+id,first_name,last_name,zip,expected
+CHK-01,Aisha,Rahman,75201,success
+CHK-02,José,García-López,10001,success
+CHK-03,,Tan,75201,first_name is required
+CHK-04,Mei,,75201,last_name is required
+CHK-05,Ravi,Kumar,,zip is required
+CHK-06,Lena,Smith,7520,zip must be 5 digits
+CHK-07,Omar,Ali,752011,zip must be 5 digits
+CHK-08,Sara,Lee,ABCDE,zip must be 5 digits

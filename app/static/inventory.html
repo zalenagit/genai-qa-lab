@@ -1,0 +1,29 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ZY Demo Store - Products</title>
+<link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body>
+<header><strong>ZY Demo Store</strong><a href="cart.html" aria-label="Cart">Cart <span class="badge" data-testid="cart-count">0</span></a></header>
+<main>
+  <h1>Products</h1>
+  <div id="products"></div>
+</main>
+<script>
+  Store.requireLogin();
+  Store.renderBadge();
+  Store.api("/api/products").then(({ body }) => {
+    document.getElementById("products").innerHTML = body.map((p) => `
+      <div class="card row" data-testid="product-${p.id}">
+        <div><strong class="name">${p.name}</strong><div class="price">${money(p.price)}</div></div>
+        <button data-testid="add-${p.id}">Add to cart</button>
+      </div>`).join("");
+    body.forEach((p) => {
+      document.querySelector(`[data-testid=add-${p.id}]`).addEventListener("click", () => {
+        const cart = Store.cart();
+        cart[p.id] = (cart[p.id] || 0) + 1;
+        Store.saveCart(cart);
+        Store.renderBadge();
+      });
+    });
+  });
+</script>
+</body></html>

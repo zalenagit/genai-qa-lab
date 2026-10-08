@@ -1,0 +1,10 @@
+[
+  {"id": "LOGIN-01", "username": "standard_user", "password": "secret123", "expected": "success"},
+  {"id": "LOGIN-02", "username": "standard_user", "password": "wrong-pass", "expected": "Invalid username or password"},
+  {"id": "LOGIN-03", "username": "unknown_user", "password": "secret123", "expected": "Invalid username or password"},
+  {"id": "LOGIN-04", "username": "locked_user", "password": "secret123", "expected": "This account is locked"},
+  {"id": "LOGIN-05", "username": "", "password": "secret123", "expected": "Username is required"},
+  {"id": "LOGIN-06", "username": "standard_user", "password": "", "expected": "Password is required"},
+  {"id": "LOGIN-07", "username": "  standard_user  ", "password": "secret123", "expected": "success"},
+  {"id": "LOGIN-08", "username": "STANDARD_USER", "password": "secret123", "expected": "Invalid username or password"}
+]

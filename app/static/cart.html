@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><title>ZY Demo Store - Cart</title>
+<link rel="stylesheet" href="style.css"><script src="app.js"></script></head>
+<body>
+<header><a href="inventory.html"><strong>ZY Demo Store</strong></a><span>Cart <span class="badge" data-testid="cart-count">0</span></span></header>
+<main>
+  <h1>Your cart</h1>
+  <div id="items"></div>
+  <p class="card" id="empty" hidden>Your cart is empty.</p>
+  <div class="row"><strong>Subtotal: <span data-testid="subtotal">$0.00</span></strong>
+    <div><button class="secondary" id="continue">Continue shopping</button>
+    <button id="checkout">Checkout</button></div></div>
+</main>
+<script>
+  Store.requireLogin();
+  async function render() {
+    Store.renderBadge();
+    const { body: products } = await Store.api("/api/products");
+    const cart = Store.cart();
+    const ids = Object.keys(cart);
+    let subtotal = 0;
+    document.getElementById("items").innerHTML = ids.map((id) => {
+      const p = products.find((x) => x.id == id);
+      subtotal += p.price * cart[id];
+      return `<div class="card row" data-testid="cart-item-${id}">
+        <div><strong>${p.name}</strong><div>Qty: <span class="qty">${cart[id]}</span></div></div>
+        <button class="secondary" data-testid="remove-${id}">Remove</button></div>`;
+    }).join("");
+    document.getElementById("empty").hidden = ids.length > 0;
+    document.getElementById("checkout").disabled = ids.length === 0;
+    document.querySelector("[data-testid=subtotal]").textContent = money(subtotal);
+    ids.forEach((id) => document.querySelector(`[data-testid=remove-${id}]`).addEventListener("click", () => {
+      const c = Store.cart(); delete c[id]; Store.saveCart(c); render();
+    }));
+  }
+  document.getElementById("continue").onclick = () => (location.href = "inventory.html");
+  document.getElementById("checkout").onclick = () => (location.href = "checkout.html");
+  render();
+</script>
+</body></html>
